@@ -184,3 +184,147 @@ function Modal({ isOpen, onClose, title, children }: ModalProps) {
   );
 }
 
+// Main App Component
+export function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto p-6">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900">Prism FinFlow</h1>
+          <p className="text-gray-600 mt-2">Financial Flow Management System</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <StatsCard 
+            title="Total Revenue" 
+            value="$125,000" 
+            change="+12.5%" 
+            icon={DollarSign} 
+            trend="up" 
+          />
+          <StatsCard 
+            title="Active Deals" 
+            value="24" 
+            change="+3" 
+            icon={Briefcase} 
+            trend="up" 
+          />
+          <StatsCard 
+            title="Hours Tracked" 
+            value="1,234" 
+            change="+8.2%" 
+            icon={Clock} 
+            trend="up" 
+          />
+          <StatsCard 
+            title="Efficiency" 
+            value="94%" 
+            change="+2.1%" 
+            icon={TrendingUp} 
+            trend="up" 
+          />
+        </div>
+
+        <Card className="mb-6">
+          <h2 className="text-2xl font-semibold mb-4">Welcome to Your Dashboard</h2>
+          <p className="text-gray-600 mb-4">
+            Manage your financial workflows, track deals, and monitor performance all in one place.
+          </p>
+          <div className="flex gap-4">
+            <Badge variant="success">System Online</Badge>
+            <Badge variant="default">Version 1.0.0</Badge>
+          </div>
+        </Card>
+
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className="bg-coral text-white px-4 py-2 rounded hover:bg-opacity-90 transition-colors"
+        >
+          Open Demo Modal
+        </button>
+
+        <Modal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          title="Demo Modal"
+        >
+          <p>This is a demo of the modal component.</p>
+        </Modal>
+      </div>
+    </div>
+  );
+}
+// Main App Component
+export function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto p-6">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900">Prism FinFlow</h1>
+          <p className="text-gray-600 mt-2">Financial Flow Management System</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <StatsCard 
+            title="Total Revenue" 
+            value=",000" 
+            change="+12.5%" 
+            icon={DollarSign} 
+            trend="up" 
+          />
+          <StatsCard 
+            title="Active Deals" 
+            value="24" 
+            change="+3" 
+            icon={Briefcase} 
+            trend="up" 
+          />
+          <StatsCard 
+            title="Hours Tracked" 
+            value="1,234" 
+            change="+8.2%" 
+            icon={Clock} 
+            trend="up" 
+          />
+          <StatsCard 
+            title="Efficiency" 
+            value="94%" 
+            change="+2.1%" 
+            icon={TrendingUp} 
+            trend="up" 
+          />
+        </div>
+
+        <Card className="mb-6">
+          <h2 className="text-2xl font-semibold mb-4">Welcome to Your Dashboard</h2>
+          <p className="text-gray-600 mb-4">
+            Manage your financial workflows, track deals, and monitor performance all in one place.
+          </p>
+          <div className="flex gap-4">
+            <Badge variant="success">System Online</Badge>
+            <Badge variant="default">Version 1.0.0</Badge>
+          </div>
+        </Card>
+
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className="bg-coral text-white px-4 py-2 rounded hover:bg-opacity-90 transition-colors"
+        >
+          Open Demo Modal
+        </button>
+
+        <Modal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          title="Demo Modal"
+        >
+          <p>This is a demo of the modal component.</p>
+        </Modal>
+      </div>
+    </div>
+  );
+}
