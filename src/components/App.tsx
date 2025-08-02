@@ -227,7 +227,7 @@ export function App() {
           />
         </div>
 
-        <Card className="mb-6">
+        <Card className="mb-6 p-6">
           <h2 className="text-2xl font-semibold mb-4">Welcome to Your Dashboard</h2>
           <p className="text-gray-600 mb-4">
             Manage your financial workflows, track deals, and monitor performance all in one place.
@@ -240,7 +240,7 @@ export function App() {
 
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="bg-coral text-white px-4 py-2 rounded hover:bg-opacity-90 transition-colors"
+          className="bg-cyan-700 text-white px-4 py-2 rounded hover:bg-cyan-800 transition-colors"
         >
           Open Demo Modal
         </button>
@@ -256,4 +256,3 @@ export function App() {
     </div>
   );
 }
-
