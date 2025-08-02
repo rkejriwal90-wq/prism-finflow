@@ -50,20 +50,24 @@ export function DealRoom({ dealId, onBack }: DealRoomProps) {
         totalValue: 45000,
         engagements: [
           {
-            id: 'eng-1',
-            dealId: dealId,
-            type: 'QS',
-            progress: 'final_reviewer',
-            status: 'active',
-            freeHours: 2,
-            freeTurns: 2,
-            hoursUsed: 1.5,
-            clientTurnsUsed: 1,
-            reviewerTurnsUsed: 0,
-            isRecurring: false,
-            pricingType: 'fixed',
-            fixedFee: 5000
-          }
+              id: 'eng-1',
+              dealId: dealId,
+              type: 'QS',
+              progress: 'final_reviewer',
+              status: 'active',
+              freeHours: 2,
+              freeTurns: 2,
+              hoursUsed: 1.5,
+              clientTurnsUsed: 1,
+              reviewerTurnsUsed: 0,
+              isRecurring: false,
+              pricingType: 'fixed',
+              fixedFee: 5000,
+              deadlines: {           // Add this section
+                fa: new Date('2024-01-15'),
+                reviewer: new Date('2024-01-20'),
+                client: new Date('2024-01-25')
+          },
         ],
         createdAt: new Date('2024-01-15'),
         updatedAt: new Date('2024-01-20')
