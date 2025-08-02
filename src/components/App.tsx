@@ -138,7 +138,7 @@ function StatsCard({ title, value, change, icon: Icon, trend }) {
   );
 }
 
-function NavItem({ icon: Icon, label, isActive, onClick, badge, isCollapsed }) {
+function NavItem({ icon: Icon, label, isActive, onClick, badge = null, isCollapsed }) {
   return (
     <div className="relative group">
       <button
