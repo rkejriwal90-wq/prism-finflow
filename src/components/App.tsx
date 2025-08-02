@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState } from 'react';
 import { 
   ChevronDown, ChevronUp, ChevronRight, Search, Bell, User, Menu, X, Eye, EyeOff, 
   AlertCircle, Loader2, Check, Home, Briefcase, Clock, FileText, Users, 
@@ -7,8 +7,15 @@ import {
   ExternalLink, Copy, Archive, Trash2, Edit2, Save, Lock, Unlock, Upload, 
   FolderPlus, Paperclip, Send, Bot, Pin, Hash, Globe, Play, Pause, Square, 
   Timer, Star, Mail, Phone, Building, Activity, BarChart3, FileSearch, 
-  Brain, Zap, ArrowUp, ArrowDown, CreditCard, ArrowRight, Link
+  Brain, Zap, ArrowUp, ArrowDown, CreditCard, ArrowRight, Link, 
+  FileIcon, Users2, DollarSign as PayrollIcon
 } from 'lucide-react';
+
+// Import your other components
+import DealRoom from './deals/room/DealRoom';
+import EngagementView from './deals/engagement/EngagementView';
+import FileManager from './files/FileManager';
+import PayrollDashboard from './payroll/PayrollDashboard';
 
 // Brand Colors and Theme
 const colors = {
@@ -34,29 +41,12 @@ const colors = {
   info: '#3B82F6'
 };
 
-// Utility function for conditional classes with proper TypeScript types
+// Utility function for conditional classes
 const cn = (...classes: (string | undefined | null | false)[]) => {
   return classes.filter(Boolean).join(' ');
 };
 
-// Custom SVG Icons with proper types
-const HardDrive: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <rect x="2" y="12" width="20" height="8" rx="2" ry="2" />
-    <path d="M2 12V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6" />
-    <line x1="6" y1="16" x2="6.01" y2="16" />
-    <line x1="10" y1="16" x2="10.01" y2="16" />
-  </svg>
-);
-
-const Book: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-  </svg>
-);
-
-// Base Components with proper types
+// Base Components
 interface CardProps {
   children: React.ReactNode;
   className?: string;
@@ -88,28 +78,6 @@ function Badge({ children, variant = 'default' }: BadgeProps) {
     <span className={cn('inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium', variants[variant])}>
       {children}
     </span>
-  );
-}
-
-interface ProgressBarProps {
-  value: number;
-  max?: number;
-  className?: string;
-}
-
-function ProgressBar({ value, max = 100, className = '' }: ProgressBarProps) {
-  const percentage = (value / max) * 100;
-  
-  return (
-    <div className={cn('w-full bg-gray-200 rounded-full h-2', className)}>
-      <div
-        className="h-full rounded-full transition-all duration-300"
-        style={{ 
-          width: `${percentage}%`,
-          backgroundColor: colors.oceanBlue
-        }}
-      />
-    </div>
   );
 }
 
@@ -156,103 +124,195 @@ function StatsCard({ title, value, change, icon: Icon, trend }: StatsCardProps) 
   );
 }
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  children: React.ReactNode;
+// Navigation Component
+interface NavItemProps {
+  icon: React.FC<{ className?: string }>;
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
 }
 
-function Modal({ isOpen, onClose, title, children }: ModalProps) {
-  if (!isOpen) return null;
-  
+function NavItem({ icon: Icon, label, isActive, onClick }: NavItemProps) {
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-screen items-center justify-center p-4">
-        <div className="fixed inset-0 bg-black bg-opacity-25" onClick={onClose} />
-        <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-medium text-gray-900">{title}</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-              <X className="h-5 w-5" />
+    <button
+      onClick={onClick}
+      className={cn(
+        'flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors w-full text-left',
+        isActive 
+          ? 'bg-cyan-700 text-white' 
+          : 'text-gray-600 hover:bg-gray-100'
+      )}
+    >
+      <Icon className="h-5 w-5" />
+      <span>{label}</span>
+    </button>
+  );
+}
+
+// Main App Component with Navigation
+export function App() {
+  const [activeView, setActiveView] = useState('dashboard');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const navigationItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: Home },
+    { id: 'deals', label: 'Deal Room', icon: Briefcase },
+    { id: 'engagements', label: 'Engagements', icon: Users2 },
+    { id: 'files', label: 'File Manager', icon: FileIcon },
+    { id: 'payroll', label: 'Payroll', icon: PayrollIcon },
+  ];
+
+    const renderContent = () => {
+    switch (activeView) {
+      case 'deals':
+        return <DealRoom dealId="demo-deal" onBack={() => setActiveView('dashboard')} />;
+      case 'engagements':
+        return <EngagementView engagementId="demo-engagement" onBack={() => setActiveView('dashboard')} />;
+      case 'files':
+        return <FileManager />;
+      case 'payroll':
+        return <PayrollDashboard />;
+      default:
+        return (
+          <>
+            {/* Dashboard Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <StatsCard 
+                title="Total Revenue" 
+                value="$125,000" 
+                change={12.5} 
+                icon={DollarSign} 
+                trend="up" 
+              />
+              <StatsCard 
+                title="Active Deals" 
+                value="24" 
+                change={3} 
+                icon={Briefcase} 
+                trend="up" 
+              />
+              <StatsCard 
+                title="Hours Tracked" 
+                value="1,234" 
+                change={8.2} 
+                icon={Clock} 
+                trend="up" 
+              />
+              <StatsCard 
+                title="Efficiency" 
+                value="94%" 
+                change={2.1} 
+                icon={TrendingUp} 
+                trend="up" 
+              />
+            </div>
+
+            {/* Quick Actions */}
+            <Card className="mb-6 p-6">
+              <h2 className="text-2xl font-semibold mb-4">Quick Actions</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <button 
+                  onClick={() => setActiveView('deals')}
+                  className="p-4 border rounded-lg hover:bg-gray-50 transition-colors text-left"
+                >
+                  <Briefcase className="h-8 w-8 text-cyan-700 mb-2" />
+                  <h3 className="font-medium">Deal Room</h3>
+                  <p className="text-sm text-gray-600">Manage your deals</p>
+                </button>
+                <button 
+                  onClick={() => setActiveView('engagements')}
+                  className="p-4 border rounded-lg hover:bg-gray-50 transition-colors text-left"
+                >
+                  <Users2 className="h-8 w-8 text-cyan-700 mb-2" />
+                  <h3 className="font-medium">Engagements</h3>
+                  <p className="text-sm text-gray-600">View engagements</p>
+                </button>
+                <button 
+                  onClick={() => setActiveView('files')}
+                  className="p-4 border rounded-lg hover:bg-gray-50 transition-colors text-left"
+                >
+                  <FileIcon className="h-8 w-8 text-cyan-700 mb-2" />
+                  <h3 className="font-medium">Files</h3>
+                  <p className="text-sm text-gray-600">Manage documents</p>
+                </button>
+                <button 
+                  onClick={() => setActiveView('payroll')}
+                  className="p-4 border rounded-lg hover:bg-gray-50 transition-colors text-left"
+                >
+                  <PayrollIcon className="h-8 w-8 text-cyan-700 mb-2" />
+                  <h3 className="font-medium">Payroll</h3>
+                  <p className="text-sm text-gray-600">Payroll dashboard</p>
+                </button>
+              </div>
+            </Card>
+
+            <Card className="p-6">
+              <h2 className="text-2xl font-semibold mb-4">Welcome to Your Dashboard</h2>
+              <p className="text-gray-600 mb-4">
+                Manage your financial workflows, track deals, and monitor performance all in one place.
+              </p>
+              <div className="flex gap-4">
+                <Badge variant="success">System Online</Badge>
+                <Badge variant="default">Version 1.0.0</Badge>
+              </div>
+            </Card>
+          </>
+        );
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Sidebar */}
+      <div className={cn(
+        'bg-white border-r border-gray-200 transition-all duration-300',
+        isSidebarOpen ? 'w-64' : 'w-16'
+      )}>
+        <div className="p-4">
+          <div className="flex items-center justify-between mb-8">
+            <h1 className={cn(
+              'font-bold text-xl text-gray-900 transition-opacity',
+              isSidebarOpen ? 'opacity-100' : 'opacity-0'
+            )}>
+              Prism FinFlow
+            </h1>
+            <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="p-1 rounded hover:bg-gray-100"
+            >
+              <Menu className="h-5 w-5" />
             </button>
           </div>
-          {children}
+          
+          <nav className="space-y-2">
+            {navigationItems.map(item => (
+              <NavItem
+                key={item.id}
+                icon={item.icon}
+                label={isSidebarOpen ? item.label : ''}
+                isActive={activeView === item.id}
+                onClick={() => setActiveView(item.id)}
+              />
+            ))}
+          </nav>
         </div>
       </div>
-    </div>
-  );
-}
 
-// Main App Component
-export function App() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto p-6">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900">Prism FinFlow</h1>
-          <p className="text-gray-600 mt-2">Financial Flow Management System</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatsCard 
-            title="Total Revenue" 
-            value="$125,000" 
-            change={12.5} 
-            icon={DollarSign} 
-            trend="up" 
-          />
-          <StatsCard 
-            title="Active Deals" 
-            value="24" 
-            change={3} 
-            icon={Briefcase} 
-            trend="up" 
-          />
-          <StatsCard 
-            title="Hours Tracked" 
-            value="1,234" 
-            change={8.2} 
-            icon={Clock} 
-            trend="up" 
-          />
-          <StatsCard 
-            title="Efficiency" 
-            value="94%" 
-            change={2.1} 
-            icon={TrendingUp} 
-            trend="up" 
-          />
-        </div>
-
-        <Card className="mb-6 p-6">
-          <h2 className="text-2xl font-semibold mb-4">Welcome to Your Dashboard</h2>
-          <p className="text-gray-600 mb-4">
-            Manage your financial workflows, track deals, and monitor performance all in one place.
-          </p>
-          <div className="flex gap-4">
-            <Badge variant="success">System Online</Badge>
-            <Badge variant="default">Version 1.0.0</Badge>
+      {/* Main Content */}
+      <div className="flex-1 overflow-auto">
+        <div className="p-6">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900">
+              {navigationItems.find(item => item.id === activeView)?.label || 'Dashboard'}
+            </h1>
+            <p className="text-gray-600 mt-1">Financial Flow Management System</p>
           </div>
-        </Card>
-
-        <button 
-          onClick={() => setIsModalOpen(true)}
-          className="bg-cyan-700 text-white px-4 py-2 rounded hover:bg-cyan-800 transition-colors"
-        >
-          Open Demo Modal
-        </button>
-
-        <Modal 
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)} 
-          title="Demo Modal"
-        >
-          <p>This is a demo of the modal component.</p>
-        </Modal>
+          
+          {renderContent()}
+        </div>
       </div>
     </div>
   );
 }
+
+
