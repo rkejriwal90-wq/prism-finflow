@@ -200,28 +200,28 @@ export function App() {
           <StatsCard 
             title="Total Revenue" 
             value="$125,000" 
-            change={12.5} 
+            change="+12.5%" 
             icon={DollarSign} 
             trend="up" 
           />
           <StatsCard 
             title="Active Deals" 
             value="24" 
-            change={3} 
+            change="+3" 
             icon={Briefcase} 
             trend="up" 
           />
           <StatsCard 
             title="Hours Tracked" 
             value="1,234" 
-            change={8.2} 
+            change="+8.2%" 
             icon={Clock} 
             trend="up" 
           />
           <StatsCard 
             title="Efficiency" 
             value="94%" 
-            change={2.1} 
+            change="+2.1%" 
             icon={TrendingUp} 
             trend="up" 
           />
@@ -329,4 +329,3 @@ export function App() {
     </div>
   );
 }
-

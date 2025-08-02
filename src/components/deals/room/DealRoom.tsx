@@ -68,6 +68,7 @@ export function DealRoom({ dealId, onBack }: DealRoomProps) {
                 reviewer: new Date('2024-01-20'),
                 client: new Date('2024-01-25')
           },
+          }
         ],
         createdAt: new Date('2024-01-15'),
         updatedAt: new Date('2024-01-20')
