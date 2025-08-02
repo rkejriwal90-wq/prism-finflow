@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ChevronDown, ChevronUp, ChevronRight, Search, Bell, User, Menu, X, Eye, EyeOff, 
   AlertCircle, Loader2, Check, Home, Briefcase, Clock, FileText, Users, 
@@ -148,7 +148,7 @@ function StatsCard({ title, value, change, icon: Icon, trend }: StatsCardProps) 
         </div>
         {Icon && (
           <div className="p-3 rounded-full" style={{ backgroundColor: `${colors.oceanBlue}20` }}>
-            <Icon className="h-6 w-6" style={{ color: colors.oceanBlue }} />
+            <span style={{ color: colors.oceanBlue }}><Icon className="h-6 w-6" /></span>
           </div>
         )}
       </div>
