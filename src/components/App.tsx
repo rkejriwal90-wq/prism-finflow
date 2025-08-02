@@ -1,0 +1,186 @@
+﻿import React, { useState, useEffect } from 'react';
+import { 
+  ChevronDown, ChevronUp, ChevronRight, Search, Bell, User, Menu, X, Eye, EyeOff, 
+  AlertCircle, Loader2, Check, Home, Briefcase, Clock, FileText, Users, 
+  MessageSquare, Settings, DollarSign, TrendingUp, Calendar, MoreVertical, 
+  Plus, Filter, Download, CheckCircle, XCircle, AlertTriangle, RefreshCw, 
+  ExternalLink, Copy, Archive, Trash2, Edit2, Save, Lock, Unlock, Upload, 
+  FolderPlus, Paperclip, Send, Bot, Pin, Hash, Globe, Play, Pause, Square, 
+  Timer, Star, Mail, Phone, Building, Activity, BarChart3, FileSearch, 
+  Brain, Zap, ArrowUp, ArrowDown, CreditCard, ArrowRight, Link
+} from 'lucide-react';
+
+// Brand Colors and Theme
+const colors = {
+  oceanBlue: '#0E7490',
+  coral: '#FF8C69',
+  teal: '#0891B2',
+  white: '#F8FAFC',
+  gray: {
+    900: '#0F172A',
+    800: '#1E293B',
+    700: '#334155',
+    600: '#475569',
+    500: '#64748B',
+    400: '#94A3B8',
+    300: '#CBD5E1',
+    200: '#E2E8F0',
+    100: '#F1F5F9',
+    50: '#F9FAFB'
+  },
+  success: '#10B981',
+  warning: '#F59E0B',
+  error: '#EF4444',
+  info: '#3B82F6'
+};
+
+// Utility function for conditional classes with proper TypeScript types
+const cn = (...classes: (string | undefined | null | false)[]) => {
+  return classes.filter(Boolean).join(' ');
+};
+
+// Custom SVG Icons with proper types
+const HardDrive: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="12" width="20" height="8" rx="2" ry="2" />
+    <path d="M2 12V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6" />
+    <line x1="6" y1="16" x2="6.01" y2="16" />
+    <line x1="10" y1="16" x2="10.01" y2="16" />
+  </svg>
+);
+
+const Book: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+  </svg>
+);
+
+// Base Components with proper types
+interface CardProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+function Card({ children, className = '' }: CardProps) {
+  return (
+    <div className={cn('bg-white rounded-lg shadow-sm border border-gray-200', className)}>
+      {children}
+    </div>
+  );
+}
+
+interface BadgeProps {
+  children: React.ReactNode;
+  variant?: 'default' | 'success' | 'warning' | 'error' | 'info';
+}
+
+function Badge({ children, variant = 'default' }: BadgeProps) {
+  const variants = {
+    default: 'bg-gray-100 text-gray-800',
+    success: 'bg-green-100 text-green-800',
+    warning: 'bg-yellow-100 text-yellow-800',
+    error: 'bg-red-100 text-red-800',
+    info: 'bg-blue-100 text-blue-800'
+  };
+  
+  return (
+    <span className={cn('inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium', variants[variant])}>
+      {children}
+    </span>
+  );
+}
+
+interface ProgressBarProps {
+  value: number;
+  max?: number;
+  className?: string;
+}
+
+function ProgressBar({ value, max = 100, className = '' }: ProgressBarProps) {
+  const percentage = (value / max) * 100;
+  
+  return (
+    <div className={cn('w-full bg-gray-200 rounded-full h-2', className)}>
+      <div
+        className="h-full rounded-full transition-all duration-300"
+        style={{ 
+          width: `${percentage}%`,
+          backgroundColor: colors.oceanBlue
+        }}
+      />
+    </div>
+  );
+}
+
+interface StatsCardProps {
+  title: string;
+  value: string | number;
+  change?: number;
+  icon?: React.FC<{ className?: string }>;
+  trend?: 'up' | 'down';
+}
+
+function StatsCard({ title, value, change, icon: Icon, trend }: StatsCardProps) {
+  const isPositive = trend === 'up';
+  
+  return (
+    <Card className="p-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-medium text-gray-600">{title}</p>
+          <p className="text-2xl font-semibold text-gray-900 mt-2">{value}</p>
+          {change && (
+            <div className="flex items-center mt-2">
+              {isPositive ? (
+                <ArrowUp className="h-4 w-4 text-green-500" />
+              ) : (
+                <ArrowDown className="h-4 w-4 text-red-500" />
+              )}
+              <span className={cn(
+                'text-sm ml-1',
+                isPositive ? 'text-green-600' : 'text-red-600'
+              )}>
+                {change}%
+              </span>
+            </div>
+          )}
+        </div>
+        {Icon && (
+          <div className="p-3 rounded-full" style={{ backgroundColor: `${colors.oceanBlue}20` }}>
+            <Icon className="h-6 w-6" style={{ color: colors.oceanBlue }} />
+          </div>
+        )}
+      </div>
+    </Card>
+  );
+}
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  children: React.ReactNode;
+}
+
+function Modal({ isOpen, onClose, title, children }: ModalProps) {
+  if (!isOpen) return null;
+  
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      <div className="flex min-h-screen items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-25" onClick={onClose} />
+        <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-medium text-gray-900">{title}</h2>
+            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
